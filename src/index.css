@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --bg0: #eef1f7;
+  --bg1: #f7f8fb;
+  --card: rgba(255, 255, 255, 0.7);
+  --card-border: rgba(255, 255, 255, 0.6);
+  --text: #0b1324;
+  --muted: rgba(11, 19, 36, 0.62);
+  --ring: rgba(107, 144, 197, 0.55);
+}
+
+.dark {
+  color-scheme: dark;
+  --bg0: #0b1020;
+  --bg1: #0e1630;
+  --card: rgba(12, 18, 35, 0.72);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --text: #edf1ff;
+  --muted: rgba(237, 241, 255, 0.68);
+  --ring: rgba(49, 226, 172, 0.45);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: theme(fontFamily.sans);
+  color: var(--text);
+  background:
+    radial-gradient(900px 500px at 12% 18%, rgba(101, 244, 196, 0.26), transparent 60%),
+    radial-gradient(800px 520px at 78% 20%, rgba(255, 171, 126, 0.22), transparent 62%),
+    radial-gradient(920px 620px at 60% 86%, rgba(147, 175, 216, 0.30), transparent 65%),
+    linear-gradient(180deg, var(--bg0), var(--bg1));
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select {
+  color: inherit;
+}
+
+::selection {
+  background: rgba(101, 244, 196, 0.35);
+}
+
+.glass {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.focus-ring:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 4px var(--ring);
+}
