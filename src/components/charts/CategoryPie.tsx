@@ -17,10 +17,19 @@ export function CategoryPie({ expenses }: { expenses: Expense[] }) {
   }, [expenses])
 
   return (
-    <div className="h-64">
-      <ResponsiveContainer width="100%" height="100%">
+    <div className="min-h-[320px] flex items-center justify-center -mt-4">
+      <ResponsiveContainer width="100%" height={320}>
         <PieChart>
-          <Pie data={data} dataKey="value" nameKey="name" innerRadius={54} outerRadius={86} paddingAngle={2}>
+          <Pie 
+            data={data} 
+            dataKey="value" 
+            nameKey="name" 
+            cx="50%" 
+            cy="50%" 
+            innerRadius={80} 
+            outerRadius={130} 
+            paddingAngle={2}
+          >
             {data.map((_, idx) => (
               <Cell key={idx} fill={COLORS[idx % COLORS.length]} />
             ))}

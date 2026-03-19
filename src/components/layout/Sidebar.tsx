@@ -4,6 +4,7 @@ import { clsx } from 'clsx'
 import { useAuthStore } from '../../store/auth'
 import { useUiStore } from '../../store/ui'
 import { Button } from '../common/Button'
+import { Logo } from '../common/Logo'
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -18,7 +19,9 @@ export function Sidebar() {
   return (
     <aside className="hidden lg:flex lg:w-72 lg:flex-col lg:gap-3 lg:p-4">
       <div className="glass shadow-glass rounded-xl2 p-4">
-        <div className="font-serif text-2xl tracking-tight">Expense Tracker</div>
+        <div className="mb-2">
+          <Logo />
+        </div>
         <div className="text-sm text-[color:var(--muted)] mt-1">
           {session?.user.name}
           <span className="mx-2 opacity-40">•</span>

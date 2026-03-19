@@ -7,6 +7,7 @@ import { ExpenseFormModal } from '../expenses/ExpenseFormModal'
 import { useAuthStore } from '../../store/auth'
 import { useFinanceStore } from '../../store/finance'
 import { monthKey } from '../../lib/dates'
+import { DashboardBackground } from '../dashboard/DashboardBackground'
 
 export function AppShell() {
   const { session } = useAuthStore()
@@ -29,7 +30,9 @@ export function AppShell() {
   }, [userId, month])
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative z-0">
+      {!onLanding && <DashboardBackground />}
+      
       {!onLanding ? <TopNav onAddExpense={() => setAddOpen(true)} /> : null}
       <main className="px-4 pb-24 lg:pb-8">
         <div className="max-w-7xl mx-auto pt-4 grid gap-4">

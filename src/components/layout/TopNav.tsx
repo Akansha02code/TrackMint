@@ -4,9 +4,11 @@ import { clsx } from 'clsx'
 import { useMemo } from 'react'
 import { useAuthStore } from '../../store/auth'
 import { useUiStore } from '../../store/ui'
+import { useFinanceStore } from '../../store/finance'
 import { Button } from '../common/Button'
-import { LogoMark } from '../branding/LogoMark'
-import { APP_NAME } from '../../constants/app'
+import { Logo } from '../common/Logo'
+import { formatINR } from '../../lib/money'
+import { isInMonth } from '../../lib/dates'
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -17,6 +19,12 @@ const navItems = [
 export function TopNav({ onAddExpense }: { onAddExpense(): void }) {
   const { session, signOut } = useAuthStore()
   const { theme, toggleTheme } = useUiStore()
+  const { expenses } = useFinanceStore()
+  
+  const today = useMemo(() => new Date(), [])
+  const monthSpent = useMemo(() => {
+    return expenses.filter(e => isInMonth(e.date, today)).reduce((sum, e) => sum + e.amount, 0)
+  }, [expenses, today])
 
   const initials = useMemo(() => {
     const n = session?.user.name?.trim() || 'User'
@@ -29,17 +37,8 @@ export function TopNav({ onAddExpense }: { onAddExpense(): void }) {
       <div className="max-w-7xl mx-auto">
         <div className="glass shadow-glass rounded-xl2 px-3 py-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
-            <NavLink to="/dashboard" className="focus-ring rounded-2xl">
-              <LogoMark />
-            </NavLink>
-            <div className="min-w-0">
-              <div className="font-serif text-xl tracking-tight leading-none">
-                {APP_NAME}
-              </div>
-              <div className="text-xs text-[color:var(--muted)] truncate">
-                {session?.user.email}
-              </div>
-            </div>
+            <Logo />
+            {/* Email removed here */}
           </div>
 
           <nav className="hidden md:flex items-center gap-1">
@@ -72,9 +71,28 @@ export function TopNav({ onAddExpense }: { onAddExpense(): void }) {
               {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
 
-            <div className="hidden lg:flex items-center gap-2 pl-1">
-              <div className="h-9 w-9 rounded-xl2 grid place-items-center bg-base-950/10 dark:bg-white/10 text-sm font-medium">
+            <div className="hidden lg:flex items-center gap-2 pl-1 relative group">
+              <div className="cursor-pointer h-10 w-10 rounded-xl grid place-items-center bg-gradient-to-br from-mint-500 to-base-600 dark:from-mint-600 dark:to-mint-800 text-white text-sm font-bold shadow-md hover:scale-105 transition-transform border border-white/20">
                 {initials || 'U'}
+              </div>
+              
+              {/* Profile Dropdown */}
+              <div className="absolute right-0 top-full mt-3 w-64 p-5 bg-white dark:bg-base-950 shadow-[0_10px_40px_rgba(0,0,0,0.12)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.3)] rounded-2xl opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 origin-top-right border border-base-200 dark:border-base-800 z-50">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="h-12 w-12 rounded-full grid place-items-center bg-gradient-to-br from-mint-500 to-base-600 text-white shadow-inner text-lg font-bold">
+                    {initials || 'U'}
+                  </div>
+                  <div className="min-w-0">
+                    <div className="font-bold text-base truncate text-base-900 dark:text-white">{session?.user.name}</div>
+                    <div className="text-xs text-[color:var(--muted)] truncate">{session?.user.email}</div>
+                  </div>
+                </div>
+                <div className="pt-3 border-t border-base-200 dark:border-base-800/50">
+                  <div className="text-xs text-[color:var(--muted)] mb-1 uppercase tracking-wider font-semibold">Spent this month</div>
+                  <div className="font-serif text-3xl font-bold tracking-tight text-mint-600 dark:text-mint-400">
+                    {formatINR(monthSpent)}
+                  </div>
+                </div>
               </div>
             </div>
 
